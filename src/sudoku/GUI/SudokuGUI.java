@@ -27,7 +27,7 @@ import sudoku.Sudoku;
 public class SudokuGUI 
 {
      private JFrame SudokuFrame;
-      private JFrame SudokuFrame1;
+     private JFrame SudokuFrame1;
      private JLabel SudokuLabel;
      private JLabel status;
      private JPanel controlPanel;
@@ -43,7 +43,7 @@ public class SudokuGUI
             SudokuFrame1 = new JFrame("Solution");
             SudokuFrame.setSize(1000,1000);
             gen=new JButton("Generate new Sudoku");
-            solve=new JButton("Solution ");
+            solve=new JButton("Solution");
             SudokuFrame.setLayout(new GridLayout(3, 1));
             SudokuLabel = new JLabel("",JLabel.CENTER );
             status = new JLabel("status",JLabel.CENTER);        
@@ -62,7 +62,7 @@ public class SudokuGUI
        solve.setPreferredSize(new Dimension(100, 100));
        gen.setPreferredSize(new Dimension(300, 100));
        solve.addActionListener(new ActionListener() {
- 
+
             public void actionPerformed(ActionEvent e)
             {
                 Sudoku s=new Sudoku();          
