@@ -18,7 +18,7 @@ public class Sudoku {
     int row, col;
     Random r;
     SudokuGUI sg;
-    int gridsol3[][]=new int[9][9];
+    int solutionSudoku[][]=new int[9][9];
    
     static int grid[][]= {{3, 0, 6, 5, 0, 8, 4, 0, 0},
                       {5, 2, 0, 0, 0, 0, 0, 0, 0},
@@ -38,7 +38,7 @@ public class Sudoku {
                 {1 ,3, 8, 9, 4, 7, 2, 5, 6},
                 {6 ,9, 2, 3 ,5 ,1 ,8 ,7 ,4},
                 {7 ,4 ,5, 2, 8, 6, 3, 1, 9}};
-  int gridsol2[][]={{3, 1, 6, 5, 7, 8, 4, 9, 2},
+  int questionSudoku[][]={{3, 1, 6, 5, 7, 8, 4, 9, 2},
                 { 5 ,2, 9, 1 ,3, 4 ,7 ,6 ,8},
                 {4 ,8, 7, 6, 2, 9, 5, 3, 1},
                 {2, 6 ,3 ,4 ,1, 5 ,9 ,8 ,7},
@@ -56,24 +56,17 @@ public class Sudoku {
                       {1, 3, 0, 0, 0, 0, 2, 5, 0},
                       {0, 0, 0, 0, 0, 0, 0, 7, 4},
                       {0, 0, 5, 2, 0, 6, 3, 0, 0}};
-    /**
-     * @param args the command line arguments
-     * 
-     * 
-     */
+  
  public Sudoku()
  {
       r=new Random();
      
  }
-    public static void main(String[] args) {
-        // TODO code application logic here
-         
+    public static void main(String[] args) {         
         //default sudoku
         //SudokuGUI sg=new SudokuGUI(grid,gridsolorg);
         Sudoku s=new Sudoku();
         s.generateSudoku();
-
     }
 
      /*   
@@ -83,11 +76,11 @@ public class Sudoku {
            {
           for(int j=0; j<9; j++)
           {
-                System.out.print(gridsol3[i][j]);
+                System.out.print(solutionSudoku[i][j]);
           }
            System.out.println(" ");
            }
-        sg=new SudokuGUI(gridsol3,true);
+        sg=new SudokuGUI(solutionSudoku,true);
         
         //backtracking+recursion
     if(solveSudoku())
@@ -106,7 +99,7 @@ public class Sudoku {
         if(!notfilled())
         {
               System.out.println("complete---------------------------------------------------------------");
-        return true;
+        returandomNumber true;
       
         }
         //printcurrentstate();
@@ -117,12 +110,12 @@ public class Sudoku {
               System.out.println("row: "+row+" column:"+col+"num:"+i);
             gridsol[row][col] = i;
             if (solveSudoku())
-                return true;
+                returandomNumber true;
             gridsol[row][col] = 0;
             System.out.println("removed"+i);
         }
     }
-    return false;
+    returandomNumber false;
        
     }
     
@@ -132,18 +125,18 @@ public class Sudoku {
         System.out.println("checking "+candidate);
         for (int c = 0; c < 9; c++)
         if (gridsol[row][c] == candidate)
-            return false;
+            returandomNumber false;
          
           for (int r = 0; r < 9; r++)
         if (gridsol[r][col] ==candidate)
-            return false;
+            returandomNumber false;
           
           for (int r = 0; r < 3; r++)
         for (int c= 0; c < 3; c++)
             if (gridsol[r+(row - row%3 )][c+(col - col%3)] ==candidate)
-                return false;
+                returandomNumber false;
 
-          return true;
+          returandomNumber true;
     }
     public boolean notfilled()
     {
@@ -153,10 +146,10 @@ public class Sudoku {
             if (gridsol[row][col] == 0)
             { //row and column are set
                   System.out.println("not filled at "+row+" "+col);
-                return true;
+                returandomNumber true;
               
             }
-        return false;
+        returandomNumber false;
     }
     
     
@@ -170,64 +163,74 @@ public class Sudoku {
     {
          int randomNum = randomize();
      
+     	 //Generate random Sudoku
          for(int j=0;j<=randomNum;j++)
-         {    swaphori();
-             swapverti();
+         {   
+         	 swapHorizontally();
+             swapVertically();
          }
       
           for(int i=0; i<9; i++)
-          for(int j=0; j<9; j++)
-            {
-                    gridsol3[i][j]=gridsol2[i][j];
-            }
-          
-         for(int j=0;j<41;j++)
+	          for(int j=0; j<9; j++)
+		          {
+		          	//Store solution before creating question
+		                    solutionSudoku[i][j]=questionSudoku[i][j];
+		          }
+         //Create Question from generated sudoku
+		 createQuestion();
+         //Launch GUI
+         SudokuGUI sg=new SudokuGUI(questionSudoku,solutionSudoku);
+    }
+    
+    public void createQuestion()
+    {
+    	for(int j=0;j<41;j++) //To create 41 empty spots in sudoku
          {
-             int r1=randomize();
-             int r2=randomize();
-             if(gridsol2[r1][r2]==0)
+             int row=randomize(); //Generate a random row
+             int column=randomize(); //Generate a random column
+             //If the random selected spot is already a empty spot,
+             // pick another random spot and step back in the loop once
+             
+             if(questionSudoku[row][column]==0) 
              {
                  j--;
                  continue;
              }
-             gridsol2[r1][r2]=0;
+             questionSudoku[row][column]=0; //create an empty spot
          }
-        
-        SudokuGUI sg=new SudokuGUI(gridsol2,gridsol3);
     }
-    
-    public void swaphori()
+
+    //Swap 2 rows in the sudoku
+    public void swapHorizontally()
     {
-        int rn1 = r.nextInt((8 - 1) + 1) +1;
-        int rn2 = r.nextInt((8 - 1) + 1) +1;
+        int randomNumber1 = randomize();
+        int randomNumber2 = randomize();
         int temp[]=new int[9];
         for(int j=0;j<9;j++)
         {
-            temp[j]=gridsol2[rn1][j];
-            gridsol2[rn1][j]=gridsol2[rn2][j];
-            gridsol2[rn2][j]=temp[j];       
+            temp[j]=questionSudoku[randomNumber1][j];
+            questionSudoku[randomNumber1][j]=questionSudoku[randomNumber2][j];
+            questionSudoku[randomNumber2][j]=temp[j];       
         }  
     }
-    
-   public void swapverti()
+
+    //Swap 2 columns in the sudoku
+    public void swapVertically()
     {
-          int rn1 = r.nextInt((8 - 1) + 1) +1;
-        int rn2 = r.nextInt((8- 1) + 1) +1;
+        int randomNumber1 = randomize();
+        int randomNumber2 = randomize();
         int temp[]=new int[9];
         for(int j=0;j<9;j++)
         {
-            temp[j]=gridsol2[j][rn1];
-            gridsol2[j][rn1]=gridsol2[j][rn2];
-            gridsol2[j][rn2]=temp[j];       
-        }
-        
+            temp[j]=questionSudoku[j][randomNumber1];
+            questionSudoku[j][randomNumber1]=questionSudoku[j][randomNumber2];
+            questionSudoku[j][randomNumber2]=temp[j];       
+        } 
     }
+
    public int randomize()
    {
-      return r.nextInt((8 - 1) + 1) +1;
-       
-       
+      return r.nextInt((8 - 0) + 1) +0;
    }
     
-         
 }

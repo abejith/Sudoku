@@ -1,0 +1,2 @@
+javac -classpath . sudoku/*.java sudoku/GUI/*.java
+java sudoku.Sudoku
